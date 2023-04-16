@@ -1,16 +1,21 @@
 import { useSelector } from 'react-redux';
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { FaStar } from "react-icons/fa";
 import { Carousel } from "react-responsive-carousel";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import productImage1 from "../images/product1.jpg";
+import  Cart  from "../Product/Cart.js";
 import { fetchProductDetails } from '../../redux/productSlice';
+import { addItem } from '../../redux/cartSlice';
 import MetaData from '../layout/Header/MetaData';
+
 
 const ProductDetails = ({ match }) => {
   const dispatch = useDispatch();
+  const [quantity, setQuantity] = useState(1);
 
+  
 
   useEffect(() => {
     dispatch(fetchProductDetails(match.params.id));
@@ -20,6 +25,21 @@ const ProductDetails = ({ match }) => {
   const { loading, error, productDetails: { product } } = useSelector(
     (state) => state.products,
   );
+
+  const increaseQuantity = () => {
+    // if (product.Stock <= quantity) return 
+    console.log(product)
+
+    setQuantity(quantity + 1)
+  }
+  const decreaseQuantity = () => {
+    if (1 >= quantity) return 
+    console.log(product)
+    setQuantity(quantity - 1)
+  }
+  function handleAddToCart(){
+      dispatch(addItem({product, quantity}))
+  }
 
   return (
     <>
@@ -83,8 +103,25 @@ const ProductDetails = ({ match }) => {
                   </div>
                 ))}
               </div>
+              <div className="flex justify-left items-center mt-4 mb-4">
+                <button className="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded-l" onClick={decreaseQuantity}>
+                  -
+                </button>
+                <input className="form-input border border-gray-300 rounded-md shadow-sm mx-2 w-16 text-center" type="text" value={quantity} readOnly></input>
+                <button className="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded-r" onClick={increaseQuantity}>
+                  +
+                </button>
+              </div>
+              <button onClick={handleAddToCart} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                        Add to Cart
+              </button>
+              <button className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded ml-4">
+                        Buy Now
+              </button>
+              
             </div>
           </div>
+          < Cart />
         </div>
       </>  
       ) : null}
