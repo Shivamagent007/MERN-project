@@ -2,12 +2,16 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import axios from 'axios';
 
 const initialState = {
-    loading: false,
+    loading: true,
     error: null,
     user:null,
     isAuthenticated: null,
     userDetails: {},
 }
+
+const axiosI = axios.create({
+    baseURL: 'http://localhost:3000',
+  });
 
 const userSlice = createSlice({
     name: 'user',
@@ -58,21 +62,21 @@ const userSlice = createSlice({
             .addCase(loadUser.pending, (state)=> {
                 state.loading = true;
                 state.isAuthenticated = false;
-                console.log("pending")
+                console.log(`user loading  in pending ${state.loading}`)
 
             })
             .addCase(loadUser.fulfilled, (state,action)=> {
                 state.loading = false;
                 state.user = action.payload;
                 state.isAuthenticated = true;
-                console.log("fullfilled")
+                console.log("user loading fullfilled")
             })
             .addCase(loadUser.rejected, (state,action)=>{
                 state.loading = false;
                 state.error = action.payload;
                 state.user = null;
                 state.isAuthenticated = false;
-                console.log("rejected")
+                console.log("user loading rejected")
 
             })
             .addCase(updateUser.pending, (state)=> {
@@ -153,7 +157,7 @@ export const logout = createAsyncThunk('user/logout',async ()=> {
 
 export const loadUser = createAsyncThunk('user/loadUser', async ()=> {
     try{
-        const {data} = await axios.get('api/v1/me')
+        const {data} = await axiosI.get('api/v1/me')
         return data
     } catch (error) {
         throw error

@@ -3,21 +3,23 @@ import LoginForm from "./LoginForm";
 import RegisterForm from "./RegisterForm";
 import { Redirect } from 'react-router-dom';
 import { useSelector ,useDispatch} from 'react-redux';
-import { loadUser } from '../../redux/userSlice';
 
 
 
-const LoginSignUp = ({history}) => {
+const LoginSignUp = ({history,redirectPath}) => {
     const [tab, setTab] = useState("login");
 
     const handleTabChange = (tab) => {
       setTab(tab);
     };
-
     const {isAuthenticated} = useSelector((state)=> state.users)
+    console.log(redirectPath)
+    console.log("hrrrrrrrr")
     if (isAuthenticated){
-        history.push("/account")
+        history.push(redirectPath)
     }
+    
+    
     return (
         <>
             <div className="pt-32 bg-white">

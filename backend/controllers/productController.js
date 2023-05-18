@@ -37,6 +37,18 @@ exports.getAllProducts = catchAsyncErrors(async (req,res)=> {
         filteredProductsCount,
     })
 })
+// Get All Product
+exports.getAdminProducts = catchAsyncErrors(async (req,res)=> {
+    
+    const productsCount = await Product.countDocuments()    
+
+    const products = await Product.find();
+    res.status(200).json({
+        success:true,
+        products,
+        productsCount,
+    })
+})
 
 // Update Product   --Admin
 

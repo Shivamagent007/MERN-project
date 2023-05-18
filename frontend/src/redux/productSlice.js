@@ -30,6 +30,21 @@ const productsSlice = createSlice({
         state.productsCount = action.payload.productsCount;
         state.filteredProductsCount = action.payload.filteredProductsCount
       })
+      .addCase(getAdminProduct.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error.message;
+      })
+      .addCase(getAdminProduct.pending, (state, action) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(getAdminProduct.fulfilled, (state, action) => {
+        state.loading = false;
+        state.error = null;
+        state.products = action.payload.products;
+        state.productsCount = action.payload.productsCount;
+        state.filteredProductsCount = action.payload.filteredProductsCount
+      })
       .addCase(fetchAllProducts.rejected, (state, action) => {
         state.loading = false;
         state.error = action.error.message;
@@ -61,6 +76,16 @@ export const fetchAllProducts = createAsyncThunk(
     }
     console.log(link)
     const { data } = await axios.get(link);
+    return data;
+  }
+);
+
+// admin all products
+export const getAdminProduct = createAsyncThunk(
+  'products/getAdminProduct',
+  async () => {
+    
+    const { data } = await axios.get('/api/v1/admin/products');
     return data;
   }
 );

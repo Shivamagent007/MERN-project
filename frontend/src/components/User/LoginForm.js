@@ -13,6 +13,7 @@ const LoginForm = () => {
     dispatch(login({email,password}))
 
     console.log("Login form submitted");
+    
   };
 
   return (
